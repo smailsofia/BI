@@ -1,33 +1,69 @@
-CREATE DataWHereCommande;
-CREATE TABLE DClient
-(id_seq_client VARCHAR(10) NOT NULL,id_client_prod INT NOT NULL,source_prod CHAR(20) ,company_name CHAR(20), city CHAR(20),country CHAR(20))
-GO
-CREATE TABLE DTemps
-(id_temps DATETIME NOT NULL,annee DATETIME NOT NULL,mois_annee DATETIME)
-GO
-CREATE TABLE DEmployee
-(id_seq_employee VARCHAR(10) NOT NULL,id_employee_prod INT NOT NULL,source_prod CHAR(20) ,nOM CHAR(20), prenom CHAR(20),territory CHAR(20),territoryDescri CHAR(20),region char(20))
-GO
-CREATE TABLE TFCommandes
-(id_seq_fait VARCHAR(10) NOT NULL,id_seq_employee VARCHAR(10) NOT NULL,id_temps DATETIME NOT NULL ,id_seq_client VARCHAR(10) NOT NULL, nbr_commandes_livrees VARCHAR(10) ,nbr_commandes_non_livrees VARCHAR(10))
+﻿
+DROP DATABASE IF EXISTS DataWHereCommande;
 GO
 
-ALTER TABLE DClient
-ADD CONSTRAINT pk_DClient PRIMARY KEY (id_seq_client);
+CREATE DATABASE DataWHereCommande;
+GO
+
+USE DataWHereCommande;
+GO
+
+CREATE TABLE DCustomer ( 
+    IdSeqCustomer INT IDENTITY(1,1) NOT NULL,
+    CustomerID VARCHAR(20),
+    SourceProd VARCHAR(20),
+    CompanyName VARCHAR(40),
+    City VARCHAR(20),
+    Country VARCHAR(20)
+);
+GO
+
+CREATE TABLE DEmployee (
+    IdSeqEmployee INT IDENTITY(1,1) NOT NULL,
+    EmployeeID VARCHAR(20),
+    SourceProd VARCHAR(20),
+    LastName VARCHAR(20),
+    FirstName VARCHAR(20),
+    Territory VARCHAR(20),
+    TerritoryDescr VARCHAR(20),
+    Region VARCHAR(10)
+);
+GO
+
+CREATE TABLE DTime (
+    IdTime INT NOT NULL,
+    YearD DATETIME,
+    MonthYear DATETIME
+);
+GO
+
+CREATE TABLE TFOrder (
+    IdSeqOrder INT IDENTITY(1,1) NOT NULL,
+    IdSeqCustomer INT NOT NULL,
+    IdSeqEmployee INT NOT NULL,
+    IdTime INT NOT NULL,
+    NbShippedOrders VARCHAR(20),
+    NbNonShippedOrders VARCHAR(20)
+);
+GO
+
+ALTER TABLE DCustomer
+ADD CONSTRAINT PK_Customer PRIMARY KEY(IdSeqCustomer);
 GO
 
 ALTER TABLE DEmployee
-ADD CONSTRAINT pk_DEmployee PRIMARY KEY (id_seq_employee);
+ADD CONSTRAINT PK_Employee PRIMARY KEY(IdSeqEmployee);
 GO
 
-ALTER TABLE DTemps
-ADD CONSTRAINT pk_DTemps PRIMARY KEY (id_temps);
+ALTER TABLE DTime
+ADD CONSTRAINT PK_Time PRIMARY KEY(IdTime);
 GO
 
-ALTER TABLE TFCommandes
+ALTER TABLE TFOrder
 ADD 
-CONSTRAINT fk_TFCommandes_DClient FOREIGN KEY (id_seq_client) REFERENCES DClient(id_seq_client),
-CONSTRAINT fk_TFCommandes_DEmployee FOREIGN KEY (id_seq_employee) REFERENCES DEmployee(id_seq_employee),
-CONSTRAINT fk_TFCommandes_DTemps FOREIGN KEY (id_temps) REFERENCES DTemps(id_temps),
-CONSTRAINT pk_TFCommandes PRIMARY KEY (id_seq_fait, id_seq_employee, id_temps, id_seq_client);
+    CONSTRAINT FK1_Order FOREIGN KEY(IdSeqCustomer) REFERENCES DCustomer(IdSeqCustomer),
+    CONSTRAINT FK2_Order FOREIGN KEY(IdSeqEmployee) REFERENCES DEmployee(IdSeqEmployee),
+    CONSTRAINT FK3_Order FOREIGN KEY(IdTime) REFERENCES DTime(IdTime),
+    CONSTRAINT PK_Order  PRIMARY KEY(IdSeqOrder, IdSeqCustomer, IdSeqEmployee, IdTime);
 GO
+﻿
