@@ -1,2 +1,13 @@
 git add Data
 git add 
+# Supprimer Data.txt
+git rm Data.txt
+
+# Vérifier le statut
+git status
+
+# Faire le commit
+git commit -m "Suppression de Data.txt"
+
+# Envoyer vers GitHub
+git push origin main
