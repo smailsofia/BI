@@ -1,5 +1,4 @@
-git add Data
-git add 
+
 # Supprimer Data.txt
 git rm Data.txt
 
